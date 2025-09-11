@@ -7,7 +7,7 @@ void div_convert ( uint32_t n , int base , char * out ) {
 
     // Handle zero case
     if ( n == 0) {
-        strcpy ( out , " 0 " ) ;
+        strcpy ( out , "0" ) ;
         return ;
     }
 
@@ -34,7 +34,7 @@ void sub_convert(uint32_t n,int base,char *out) {
     int pos = 0;
 
     if ( n == 0) {
-        strcpy ( out , " 0 " ) ;
+        strcpy ( out , "0" ) ;
         return ;
     }
 
@@ -42,7 +42,7 @@ void sub_convert(uint32_t n,int base,char *out) {
     while(power*base<=n){
         power*=base;
     }
-    while (n>0){
+    while (power>0){
         int digit = n/power;
         if (digit < 10)
             temp[pos++] = '0' + digit;
@@ -50,6 +50,9 @@ void sub_convert(uint32_t n,int base,char *out) {
             temp[pos++] = 'A' + (digit- 10);
         n = n-(digit*power);
         power = power/base;
+    }
+    for(int i=1; i<pos; i++){
+        out[i]=temp[i];
     }
     out[pos] = '\0';
 }
