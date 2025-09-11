@@ -29,3 +29,26 @@ void div_convert ( uint32_t n , int base , char * out ) {
     }
     out[pos] = '\0';
 }
+void sub_convert(uint32_t n,int base,char *out) {
+    char temp[65];
+    int pos = 0;
+
+    if ( n == 0) {
+        strcpy ( out , " 0 " ) ;
+        return ;
+    }
+
+    uint32_t power = 1;
+    while(power*base<=n){
+        power*=base;
+    }
+    while (n>0){
+        int digit = n/power;
+        if (digit < 10)
+            temp[pos++] = '0' + digit;
+        else
+            temp[pos++] = 'A' + (digit- 10);
+        n = n-(digit*power);
+    }
+    out[pos] = '\0';
+}
