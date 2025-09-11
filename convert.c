@@ -49,6 +49,7 @@ void sub_convert(uint32_t n,int base,char *out) {
         else
             temp[pos++] = 'A' + (digit- 10);
         n = n-(digit*power);
+        power = power/base;
     }
     out[pos] = '\0';
 }
