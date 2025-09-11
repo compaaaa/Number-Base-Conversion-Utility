@@ -51,7 +51,7 @@ void sub_convert(uint32_t n,int base,char *out) {
         n = n-(digit*power);
         power = power/base;
     }
-    for(int i=1; i<pos; i++){
+    for(int i=0; i<pos; i++){
         out[i]=temp[i];
     }
     out[pos] = '\0';
