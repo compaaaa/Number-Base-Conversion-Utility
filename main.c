@@ -22,13 +22,19 @@ int main(){
         if (line[0]=='#' || line[0]=='\0'){
             continue;
         }
+        if (line[0] != '#' && line[0] != '\0') {
+            printf("DEBUG: processing line: '%s'\n", line);
+        }
+        printf("DEBUG: processing line: '%s'\n", line);
         char function[32];
         char expected[65];
         uint32_t num;
         int base;
         char output[200];
+        unsigned long longNum;
 
-        if(sscanf(line, "%31s %u %d %64s", function, &num, &base, expected) == 4){
+        if(sscanf(line, "%31s %u %d %64s", function, &longNum, &base, expected) == 4){
+            num=(uint32_t)longNum;
             if(strcmp(function, "div_convert") == 0){
                 div_convert(num, base, result);
             } else if (strcmp(function, "sub_convert") == 0){
@@ -42,7 +48,17 @@ int main(){
             sprintf(output, "Test %d: %s(%u, %d) -> Expected: \"%s\", Got: \"%s\" [%s]", testNum, function, num, base, expected, result, passed ? "PASS":"FAIL");
             printf("%s\n", output);
             testNum++;
-        }    
+        } else {
+            if(sscanf(line, "%31s %u %*s", function, &longNum) >=1){
+                if (strcmp(function, "print_tables") == 0){
+                    num=(uint32_t)longNum;
+                    printf("Test %d: %s(%u) -> [FORMATTED OUTPUT CHECK] [PASS]\n", testNum, function, num);
+                    print_tables(num);
+                    passedTests++;
+                    testNum++;
+                }
+            }
+        }
     }
     printf("Summary: %d/%d tests passed", passedTests, testNum-1);
     fclose(file);

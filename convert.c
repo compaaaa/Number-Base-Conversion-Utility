@@ -40,7 +40,7 @@ void sub_convert(uint32_t n,int base,char *out) {
     }
 
     uint32_t power = 1;
-    while(power*base<=n){
+    while(power<=UINT16_MAX/base && power*base<=n){
         power*=base;
     }
     while (power>0){
@@ -56,6 +56,7 @@ void sub_convert(uint32_t n,int base,char *out) {
         out[i]=temp[i];
     }
     out[pos] = '\0';
+    strcpy(out, temp);
 }
 void print_tables(uint32_t n){
     char bin[33], oct[12], hex[9];
