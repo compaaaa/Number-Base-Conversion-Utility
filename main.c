@@ -12,6 +12,13 @@ int main(){
         printf("Error: Couldn't open file\n");
         return 1;
     }
+    FILE *resultfile = fopen("output.txt", "w");
+    if (resultfile == NULL){
+        printf("Error: Couldn't create output.txt\n");
+        fclose(file);
+        return 1;
+    }
+    
     
     char line[256];
     char result[65];
@@ -22,10 +29,7 @@ int main(){
         if (line[0]=='#' || line[0]=='\0'){
             continue;
         }
-        if (line[0] != '#' && line[0] != '\0') {
-            printf("DEBUG: processing line: '%s'\n", line);
-        }
-        printf("DEBUG: processing line: '%s'\n", line);
+
         char function[32];
         char expected[65];
         uint32_t num;
@@ -47,12 +51,14 @@ int main(){
             
             sprintf(output, "Test %d: %s(%u, %d) -> Expected: \"%s\", Got: \"%s\" [%s]", testNum, function, num, base, expected, result, passed ? "PASS":"FAIL");
             printf("%s\n", output);
+            fprintf(resultfile, "%s\n", output);
             testNum++;
         } else {
             if(sscanf(line, "%31s %u %*s", function, &longNum) >=1){
                 if (strcmp(function, "print_tables") == 0){
                     num=(uint32_t)longNum;
                     printf("Test %d: %s(%u) -> [FORMATTED OUTPUT CHECK] [PASS]\n", testNum, function, num);
+                    fprintf(resultfile, "Test %d: %s(%u) -> [FORMATTED OUTPUT CHECK] [PASS]\n", testNum, function, num);
                     print_tables(num);
                     passedTests++;
                     testNum++;
@@ -61,7 +67,9 @@ int main(){
         }
     }
     printf("Summary: %d/%d tests passed", passedTests, testNum-1);
+    fprintf(resultfile, "Summary: %d/%d tests passed", passedTests, testNum-1);
     fclose(file);
+    fclose(resultfile);
     
     return 0;
 }
